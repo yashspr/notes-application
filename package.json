@@ -12,6 +12,8 @@
     "axios": "^0.19.2",
     "core-js": "^2.6.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "googleapis": "^48.0.0",
     "morgan": "^1.9.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
@@ -40,7 +42,15 @@
       "plugin:vue/essential",
       "@vue/prettier"
     ],
-    "rules": {},
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "tabWidth": 4,
+          "useTabs": true
+        }
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
