@@ -105,4 +105,18 @@ router.get("/success", async (req, res) => {
 	res.end("Success");
 });
 
+router.get("/logout", (req, res) => {
+	if (req.user && req.session.user_email) {
+		req.session.destroy(err => {
+			if (err) {
+				res.end("Unable to logout");
+			} else {
+				res.end("Successfully logged out");
+			}
+		});
+	} else {
+		res.end("Not logged in");
+	}
+});
+
 module.exports = router;
