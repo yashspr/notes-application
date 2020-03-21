@@ -1,8 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-
-const app = express();
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 
 mongoose.connect("mongodb://localhost/notes_application", {
 	useNewUrlParser: true,
@@ -12,12 +12,32 @@ mongoose.connect("mongodb://localhost/notes_application", {
 /* Running Mongoose Models */
 require("./models/User");
 
+const { getUserInfoFromDb } = require("./helpers/auth");
+
+const app = express();
+
+var session_config = {
+	secret: "keyboard cat",
+	resave: false,
+	saveUninitialized: false,
+	store: new MongoStore({ mongooseConnection: mongoose.connection })
+};
+
+if (app.get("env") === "production") {
+	app.set("trust proxy", 1); // trust first proxy
+	session_config.cookie.secure = true; // serve secure cookies
+}
+
 /* Loading Routes */
 const authRoute = require("./routes/auth");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
+app.use(session(session_config));
+
+// populating the session object with user info if session is active.
+app.use(getUserInfoFromDb);
 
 app.use("/auth", authRoute);
 
