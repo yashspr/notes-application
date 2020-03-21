@@ -13,7 +13,7 @@ mongoose.connect("mongodb://localhost/notes_application", {
 require("./models/User");
 
 // Importing helper functions
-const { getUserInfoFromDb } = require("./helpers/auth");
+const { getUserInfoFromDb, refreshAccessToken } = require("./helpers/auth");
 
 const app = express();
 
@@ -40,6 +40,7 @@ app.use(session(session_config));
 
 // populating the session object with user info if session is active.
 app.use(getUserInfoFromDb);
+app.use(refreshAccessToken);
 
 app.use("/auth", authRoute);
 

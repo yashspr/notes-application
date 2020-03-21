@@ -6,7 +6,11 @@ const axios = require("axios").default;
 const UserModel = mongoose.model("user");
 const router = express.Router();
 const googleConfig = require("../config/google_auth");
-const { dontAllowLoggedIn } = require("../helpers/auth");
+const {
+	dontAllowLoggedIn,
+	refreshAccessToken,
+	allowLoggedIn
+} = require("../helpers/auth");
 
 // Create an oAuth2 client to authorize the API call
 const client = new google.auth.OAuth2(
@@ -118,5 +122,10 @@ router.get("/logout", (req, res) => {
 		res.end("Not logged in");
 	}
 });
+
+/* router.get("/refreshTest", allowLoggedIn, (req, res) => {
+	refreshAccessToken(req, res, () => { });
+	res.end("Look at console");
+}); */
 
 module.exports = router;
