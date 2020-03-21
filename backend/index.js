@@ -9,9 +9,10 @@ mongoose.connect("mongodb://localhost/notes_application", {
 	useUnifiedTopology: true
 });
 
-/* Running Mongoose Models */
+// Running Mongoose Models
 require("./models/User");
 
+// Importing helper functions
 const { getUserInfoFromDb } = require("./helpers/auth");
 
 const app = express();
@@ -28,9 +29,10 @@ if (app.get("env") === "production") {
 	session_config.cookie.secure = true; // serve secure cookies
 }
 
-/* Loading Routes */
+// Loading Routes
 const authRoute = require("./routes/auth");
 
+// Applying Middleware to Express
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));

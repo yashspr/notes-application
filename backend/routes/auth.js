@@ -16,6 +16,7 @@ const client = new google.auth.OAuth2(
 );
 
 router.get("/login", dontAllowLoggedIn, function (req, res) {
+	// Generate a Google URL to which user will be redirected to for authorization
 	let authorizeUrl = client.generateAuthUrl({
 		access_type: "offline",
 		scope: googleConfig.scope
@@ -25,6 +26,7 @@ router.get("/login", dontAllowLoggedIn, function (req, res) {
 });
 
 router.get("/success", async (req, res) => {
+	// Google callback will send a code which must be exchanged for access tokens
 	let code = req.query.code;
 	if (!code || code == "") {
 		res.end("Auth Failed");
@@ -32,7 +34,7 @@ router.get("/success", async (req, res) => {
 
 	let tokens = null;
 	try {
-		let tokens_data = await client.getToken(code);
+		let tokens_data = await client.getToken(code); // Get access tokens for the received code
 		tokens = tokens_data.tokens;
 		console.log(tokens);
 	} catch (e) {
@@ -41,6 +43,7 @@ router.get("/success", async (req, res) => {
 		return;
 	}
 
+	// Get user profile details (name, email, etc) using the access tokens we received
 	let response = await axios.get(
 		"https://www.googleapis.com/oauth2/v3/userinfo",
 		{
@@ -52,7 +55,9 @@ router.get("/success", async (req, res) => {
 
 	let userEmail = response.data.email;
 
+	// To check if the signed in user is new user or previously logged in user
 	let user = await UserModel.findOne({ email: userEmail });
+
 	if (user) {
 		// user is there in database, so we must use the existing access_tokens
 		// But everytime the user logins, new tokens are generated which we must save
@@ -71,6 +76,7 @@ router.get("/success", async (req, res) => {
 			console.log("Failed to update tokens");
 		}
 	} else {
+		// We are saving the new user to the database along with the access tokens
 		const newUser = {
 			email: response.data.email,
 			name: response.data.name,
