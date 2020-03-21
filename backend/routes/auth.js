@@ -34,8 +34,14 @@ router.get("/success", async (req, res) => {
 		res.end("Auth Failed");
 	}
 
+	try {
 	const { tokens } = await client.getToken(code);
 	console.log(tokens);
+	} catch (e) {
+		console.log("Unable to retrieve token from code. Maye a rogue request");
+		res.end("Invalid");
+		return;
+	}
 
 	let response = await axios.get(
 		"https://www.googleapis.com/oauth2/v3/userinfo",
