@@ -1,0 +1,78 @@
+#nav {
+  padding: 1.5rem;
+  font-size: 2rem;
+  text-align: center;
+  display: flex;
+  a {
+    text-decoration: none;
+    color: var(--text-color);
+    &.router-link-exact-active {
+      color: var(--primary-color);
+    }
+    margin-right: 2rem;
+  }
+  a:first-child {
+    margin-right: auto;
+  }
+  border-bottom: 0.1rem solid var(--secondary-color);
+}
+
+.note-card {
+  margin-left: 2rem;
+  border-bottom: 0.1rem solid var(--secondary-color);
+  cursor: pointer;
+  &:not(:first-child) {
+    margin-top: 2rem;
+  }
+  &__title {
+    // margin: 2rem 0;
+    font-size: 2rem;
+  }
+  &__description {
+    font-size: 1.5rem;
+    line-height: 4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.form {
+  height: 100%;
+  &__title {
+    width: 100%;
+    height: 5rem;
+    outline: none;
+    border: none;
+    border-bottom: 0.1rem solid var(--secondary-color);
+    margin-bottom: 3rem;
+    padding-left: 2rem;
+    font-size: 3rem;
+  }
+  &__textarea {
+    width: 100%;
+    border: none;
+    padding-left: 2rem;
+    height: 100%;
+    font-size: 2rem;
+    resize: none;
+  }
+}
+
+.toolbar {
+  border-bottom: 0.1rem solid var(--secondary-color);
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 1rem;
+
+  &__icon-container {
+    margin-right: 2rem;
+    display: flex;
+    cursor: pointer;
+  }
+  &__icon {
+    height: 2.5rem;
+    width: 2.5rem;
+    fill: var(--primary-color);
+  }
+}
