@@ -1,0 +1,15 @@
+.body__container {
+	display: flex;
+	position: absolute;
+	top: 6rem;
+	bottom: 0;
+	overflow: hidden;
+	.list__container {
+		padding-left: 2rem 0 0 2rem;
+		width: 20vw;
+		border-right: 0.1rem solid var(--secondary-color);
+	}
+	.create__container {
+		width: 80vw;
+	}
+}
