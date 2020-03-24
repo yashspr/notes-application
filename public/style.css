@@ -1,117 +1,117 @@
 :root {
-  --primary-color: #42b983;
-  --secondary-color: #b9b3b3;
-  --text-color: #2c3e50;
+	--primary-color: #42b983;
+	--secondary-color: #b9b3b3;
+	--text-color: #2c3e50;
 }
 
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 html {
-  font-size: 62.5%;
+	font-size: 62.5%;
 }
 
 body {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  color: var(--text-color);
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	color: var(--text-color);
 }
 
 .body__container {
-  display: flex;
-  position: absolute;
-  top: 6rem;
-  bottom: 0;
-  overflow: hidden;
+	display: flex;
+	position: absolute;
+	top: 6rem;
+	bottom: 0;
+	overflow: hidden;
 }
 .body__container .list__container {
-  padding-left: 2rem 0 0 2rem;
-  width: 20vw;
-  border-right: 0.1rem solid var(--secondary-color);
+	padding-left: 2rem 0 0 2rem;
+	width: 20vw;
+	border-right: 0.1rem solid var(--secondary-color);
 }
 .body__container .create__container {
-  width: 80vw;
+	width: 80vw;
 }
 
 #nav {
-  padding: 1.5rem;
-  font-size: 2rem;
-  text-align: center;
-  display: flex;
-  border-bottom: 0.1rem solid var(--secondary-color);
+	padding: 1.5rem;
+	font-size: 2rem;
+	text-align: center;
+	display: flex;
+	border-bottom: 0.1rem solid var(--secondary-color);
 }
 #nav a {
-  text-decoration: none;
-  color: var(--text-color);
-  margin-right: 2rem;
+	text-decoration: none;
+	color: var(--text-color);
+	margin-right: 2rem;
 }
 #nav a.router-link-exact-active {
-  color: var(--primary-color);
+	color: var(--primary-color);
 }
 #nav a:first-child {
-  margin-right: auto;
+	margin-right: auto;
 }
 
 .note-card {
-  margin-left: 2rem;
-  border-bottom: 0.1rem solid var(--secondary-color);
-  cursor: pointer;
+	margin-left: 2rem;
+	border-bottom: 0.1rem solid var(--secondary-color);
+	cursor: pointer;
 }
 .note-card:not(:first-child) {
-  margin-top: 2rem;
+	margin-top: 2rem;
 }
 .note-card__title {
-  font-size: 2rem;
+	font-size: 2rem;
 }
 .note-card__description {
-  font-size: 1.5rem;
-  line-height: 4rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	font-size: 1.5rem;
+	line-height: 4rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .form {
-  height: 100%;
+	height: 100%;
 }
 .form__title {
-  width: 100%;
-  height: 5rem;
-  outline: none;
-  border: none;
-  border-bottom: 0.1rem solid var(--secondary-color);
-  margin-bottom: 3rem;
-  padding-left: 2rem;
-  font-size: 3rem;
+	width: 100%;
+	height: 5rem;
+	outline: none;
+	border: none;
+	border-bottom: 0.1rem solid var(--secondary-color);
+	margin-bottom: 3rem;
+	padding-left: 2rem;
+	font-size: 3rem;
 }
 .form__textarea {
-  width: 100%;
-  border: none;
-  padding-left: 2rem;
-  height: 100%;
-  font-size: 2rem;
-  resize: none;
+	width: 100%;
+	border: none;
+	padding-left: 2rem;
+	height: 100%;
+	font-size: 2rem;
+	resize: none;
 }
 
 .toolbar {
-  border-bottom: 0.1rem solid var(--secondary-color);
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: 1rem;
+	border-bottom: 0.1rem solid var(--secondary-color);
+	display: flex;
+	justify-content: flex-end;
+	padding-bottom: 1rem;
 }
 .toolbar__icon-container {
-  margin-right: 2rem;
-  display: flex;
-  cursor: pointer;
+	margin-right: 2rem;
+	display: flex;
+	cursor: pointer;
 }
 .toolbar__icon {
-  height: 2.5rem;
-  width: 2.5rem;
-  fill: var(--primary-color);
+	height: 2.5rem;
+	width: 2.5rem;
+	fill: var(--primary-color);
 }
 
 /*# sourceMappingURL=style.css.map */

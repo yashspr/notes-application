@@ -1,21 +1,21 @@
 :root {
-  --primary-color: #42b983;
-  --secondary-color: #b9b3b3;
-  --text-color: #2c3e50;
+	--primary-color: #42b983;
+	--secondary-color: #b9b3b3;
+	--text-color: #2c3e50;
 }
 
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 html {
-  font-size: 62.5%;
+	font-size: 62.5%;
 }
 
 body {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  color: var(--text-color);
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	color: var(--text-color);
 }

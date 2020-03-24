@@ -1,9 +1,9 @@
 <template>
-  <router-link :to="{name: routeName}">{{displayName}}</router-link>
+	<router-link :to="{ name: routeName }">{{ displayName }}</router-link>
 </template>
 
 <script>
 export default {
-  props: ["routeName", "displayName"]
+	props: ['routeName', 'displayName']
 };
 </script>
