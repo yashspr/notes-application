@@ -95,8 +95,9 @@ function refreshAccessToken(req, res, next) {
 			// res.end("Token is still valid");
 			next();
 		}
+	} else {
+		next();
 	}
-	next();
 }
 
 function saveTokensToDb(req, new_tokens) {
