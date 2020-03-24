@@ -1,6 +1,7 @@
 class MetadataHandler {
 	constructor(metadata) {
-		this.metadata = metadata;
+		this._metadata = metadata;
+		this._metadata.files = this._metadata.files || {};
 	}
 
 	newFile({ fileId, filename, title, createdDate, tags = [] }) {
@@ -19,12 +20,12 @@ class MetadataHandler {
 			tags
 		};
 
-		this.metadata.files[fileId] = newfile;
+		this._metadata.files[fileId] = newfile;
 	}
 
 	removeFile(fileId) {
 		this._validate(fileId);
-		delete this.metadata.files[fileId];
+		delete this._metadata.files[fileId];
 	}
 
 	updateFile({ fileId, title, lastModified, tags = [] }) {
@@ -36,30 +37,30 @@ class MetadataHandler {
 
 	updateTitle(fileId, title) {
 		this._validate(fileId);
-		this.metadata.files[fileId].title = title;
+		this._metadata.files[fileId].title = title;
 	}
 
 	updateLastModified(fileId, lastModified) {
 		this._validate(fileId);
-		this.metadata.files[fileId].lastModified = lastModified;
+		this._metadata.files[fileId].lastModified = lastModified;
 	}
 
 	updateTags(fileId, tags) {
 		this._validate(fileId);
-		this.metadata.files[fileId].tags = tags;
+		this._metadata.files[fileId].tags = tags;
 	}
 
 	_validate(fileId) {
 		if (
-			this.metadata.files[fileId] == undefined ||
-			this.metadata.files[fileId] == null
+			this._metadata.files[fileId] == undefined ||
+			this._metadata.files[fileId] == null
 		) {
 			throw Error("Invalid FileId");
 		}
 	}
 
 	get metadata() {
-		return this.metadata;
+		return this._metadata;
 	}
 }
 

@@ -54,6 +54,7 @@ function getUserInfoFromDb(req, res, next) {
 
 function refreshAccessToken(req, res, next) {
 	if (req.user) {
+		console.log(req.user);
 		const client = new google.auth.OAuth2(
 			googleConfig.client_id,
 			googleConfig.client_secret,
@@ -71,7 +72,7 @@ function refreshAccessToken(req, res, next) {
 		client.credentials = credentials;
 
 		if (client.isTokenExpiring()) {
-			console.log("Token is expiring is expired. Need to refresh it.");
+			console.log("Token is expiring or expired. Need to refresh it.");
 			client
 				.refreshToken(tokens.refresh_token)
 				.then(function (response) {

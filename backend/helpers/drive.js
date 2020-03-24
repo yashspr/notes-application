@@ -69,7 +69,7 @@ function getMetaDataFileId(req) {
 }
 
 function getMetaDataFile(req) {
-	new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		getMetaDataFileId(req)
 			.then(id => {
 				req.drive.files

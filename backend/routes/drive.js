@@ -172,7 +172,7 @@ router.post("/upload", async (req, res) => {
 			for (let i = 0; i < files.length; i++) {
 				try {
 					let filename = "file-" + uid() + ".md";
-					let fileId = await uploadFile(req, files[i].body);
+					let fileId = await uploadFile(req, files[i].body, filename);
 					metadataHandler.newFile({
 						fileId,
 						filename,
@@ -221,9 +221,10 @@ router.post("/update", async (req, res) => {
 
 		[
 			{
-				title: note2,
-				body: note2 body,
-				tags: [tag1, tag2, etc]
+				fileId: file id of file saved in drive
+				title: note2.
+				body: note2 body
+				tags: [tag1, tag2, etc] Pass empty array is no tags
 			}
 		]
 
