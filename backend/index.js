@@ -13,9 +13,12 @@ mongoose.connect("mongodb://localhost/notes_application", {
 require("./models/User");
 
 // Importing helper functions
-const { getUserInfoFromDb, refreshAccessToken } = require("./helpers/auth");
+const { getUserInfoFromDb, refreshAccessToken } = require("./middleware/auth");
 
 const app = express();
+
+app.set("view engine", "pug");
+app.set("views", "backend/views");
 
 var session_config = {
 	secret: "keyboard cat",
@@ -31,6 +34,7 @@ if (app.get("env") === "production") {
 
 // Loading Routes
 const authRoute = require("./routes/auth");
+const driveApiRoute = require("./routes/drive");
 
 // Applying Middleware to Express
 app.use(express.json());
@@ -43,5 +47,12 @@ app.use(getUserInfoFromDb);
 app.use(refreshAccessToken);
 
 app.use("/auth", authRoute);
+app.use("/drive", driveApiRoute);
+
+app.post("/test", (req, res) => {
+	console.log(req.body);
+	console.log(req.body.length);
+	res.end();
+});
 
 app.listen(4000, () => console.log("Server started on port 4000"));

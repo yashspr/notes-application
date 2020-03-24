@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		title Test
+	body
+		nav
+			ul
+				li 
+					a(href="/drive/list") List Files
+				li 
+					a(href="/drive/meta") Get meta data file
+				li 
+					a(href="/drive/delete/all") Delete all files in drive
+			
+		form(action="/drive/upload", method="POST")
+			textarea(name="text", cols="30", rows="10")
+			input(type="submit", value="Submit")
+
+		form(action="/drive/update", method="POST")
+			textarea(name="text", cols="30", rows="10")
+			input(type="text", name="fileid")
+			input(type="submit", value="Submit")

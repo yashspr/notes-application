@@ -61,11 +61,13 @@ function refreshAccessToken(req, res, next) {
 		);
 
 		const tokens = req.user.tokens;
+
 		const credentials = {
 			access_token: tokens.access_token,
 			refresh_token: tokens.refresh_token,
 			expiry_date: tokens.expiry_date
 		};
+
 		client.credentials = credentials;
 
 		if (client.isTokenExpiring()) {
@@ -76,36 +78,35 @@ function refreshAccessToken(req, res, next) {
 					// console.log("Refreshed token response is: ");
 					// console.log(response.tokens);
 					let tokens = response.tokens;
-					saveTokensToDb(req.user, tokens);
+					return saveTokensToDb(req, tokens);
+				})
+				.then(user => {
+					console.log("Updated tokens");
 				})
 				.catch(err => {
+					console.log("Error in updating tokens");
 					console.log("Error refreshing tokens");
 					console.log(err);
-				});
+				})
+				.finally(() => next());
 			// res.end("Token was expired or going to expire. So refreshed it.");
 		} else {
 			console.log("Token is still valid");
 			// res.end("Token is still valid");
+			next();
 		}
 	}
 	next();
 }
 
-function saveTokensToDb(user_doc, new_tokens) {
-	user_doc.tokens = {
-		refresh_token: user_doc.tokens.refresh_token,
+function saveTokensToDb(req, new_tokens) {
+	req.user.tokens = {
+		refresh_token: req.user.tokens.refresh_token,
 		access_token: new_tokens.access_token,
 		expiry_date: new_tokens.expiry_date
 	};
 
-	user_doc
-		.save()
-		.then(user => {
-			console.log("Updated tokens");
-		})
-		.catch(err => {
-			console.log("Error in updating tokens");
-		});
+	return req.user.save();
 }
 
 module.exports = {
