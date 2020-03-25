@@ -17,8 +17,7 @@ export default {
 	},
 	methods: {
 		populateForm() {
-			const note = this.note;
-			EventBus.$emit('populate-form', note);
+			EventBus.$emit('populate-form', this.note);
 		}
 	}
 };
