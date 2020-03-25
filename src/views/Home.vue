@@ -1,17 +1,14 @@
 <template>
 	<div class="body__container">
 		<NotesList :notes="notes" />
-		<NotesCreate
-			@add-to-notes="addNoteToNotes"
-			@update-note="updateNote"
-			@delete-note="deleteNote"
-		/>
+		<NotesCreate />
 	</div>
 </template>
 
 <script>
 import NotesList from '@/components/NotesList.vue';
 import NotesCreate from '@/components/NotesCreate.vue';
+import EventBus from '@/main.js';
 export default {
 	name: 'home',
 	data() {
@@ -43,8 +40,19 @@ export default {
 		NotesList,
 		NotesCreate
 	},
+	mounted() {
+		EventBus.$on('update-note', note => {
+			this.updateNote(note);
+		});
+		EventBus.$on('add-to-notes', note => {
+			this.addNewNote(note);
+		});
+		EventBus.$on('delete-note', id => {
+			this.deleteNote(id);
+		});
+	},
 	methods: {
-		addNoteToNotes(note) {
+		addNewNote(note) {
 			note.id = this.notes.length + 1;
 			this.notes.push(note);
 		},
