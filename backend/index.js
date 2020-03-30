@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
+const cors = require('cors');
 
 mongoose.connect("mongodb://localhost/notes_application", {
 	useNewUrlParser: true,
@@ -16,6 +17,8 @@ require("./models/User");
 const { getUserInfoFromDb, refreshAccessToken } = require("./middleware/auth");
 
 const app = express();
+
+app.use(cors());
 
 app.set("view engine", "pug");
 app.set("views", "backend/views");
