@@ -52,24 +52,32 @@ export default {
 			this.description = null;
 		},
 		updateNote() {
-			let note = {
-				id: this.id,
-				title: this.title,
-				description: this.description
-			};
-			EventBus.$emit('update-note', note);
+			if (this.id) {
+				let note = {
+					id: this.id,
+					title: this.title,
+					description: this.description
+				};
+				EventBus.$emit('update-note', note);
+			}
 		},
 		addNewNote() {
-			this.title = this.title === null || '' ? 'New Note' : this.title;
-			this.description =
-				this.description === null || '' ? 'Write your notes' : this.description;
-			let note = {
-				title: this.title,
-				description: this.description
-			};
+			let note = {};
+			if (!this.id) {
+				this.title = this.title === null || '' ? 'New Note' : this.title;
+				this.description =
+					this.description === null || ''
+						? 'Write your notes'
+						: this.description;
+				note.title = this.title;
+				note.description = this.description;
+				this.title = null;
+				this.description = null;
+			} else {
+				note.title = 'New Note';
+				note.description = 'Write your notes';
+			}
 			EventBus.$emit('add-to-notes', note);
-			this.title = null;
-			this.description = null;
 		},
 		deleteNote() {
 			!this.id

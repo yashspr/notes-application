@@ -6,6 +6,7 @@
 	a {
 		text-decoration: none;
 		color: var(--text-color);
+		cursor: pointer;
 		&.router-link-exact-active {
 			color: var(--primary-color);
 		}
