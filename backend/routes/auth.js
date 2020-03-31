@@ -26,6 +26,7 @@ router.get("/login", dontAllowLoggedIn, function (req, res) {
 });
 
 router.get("/success", async (req, res) => {
+	let message = "";
 	// Google callback will send a code which must be exchanged for access tokens
 	let code = req.query.code;
 	if (!code || code == "") {
@@ -39,7 +40,8 @@ router.get("/success", async (req, res) => {
 		console.log(tokens);
 	} catch (e) {
 		console.log("Unable to retrieve token from code. Maye a rogue request");
-		res.end("Invalid");
+		// res.end("Invalid");
+		message = "failed";
 		return;
 	}
 
@@ -72,8 +74,10 @@ router.get("/success", async (req, res) => {
 		try {
 			await user.save();
 			console.log("updated the tokens");
+			message = "success";
 		} catch (e) {
 			console.log("Failed to update tokens");
+			message = "faialed";
 		}
 	} else {
 		// We are saving the new user to the database along with the access tokens
@@ -91,18 +95,22 @@ router.get("/success", async (req, res) => {
 			let savedUserDoc = await new UserModel(newUser).save();
 			console.log("saved user to db");
 			console.log(savedUserDoc);
+			message = "success";
 		} catch (e) {
 			console.log("Couldn't save new user to database");
 			console.log(e);
-			res.end("Failed");
+			message = "failed";
+			// res.end("Failed");
 			// Make sure to send some error message to the user
 		}
 	}
 
 	// Initialize session for the user and save his email
 	req.session.user_email = userEmail;
-
-	res.end("Success");
+	// res.end("Success");
+	res.render('message', {
+		message
+	});
 });
 
 router.get("/logout", (req, res) => {

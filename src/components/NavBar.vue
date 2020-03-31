@@ -2,7 +2,7 @@
 	<div id="nav">
 		<NavItem routeName="home" displayName="Simple Note" />
 		<a v-if="!successfulsignin" @click="signin">signin</a>
-		<a v-else @click="signout">signout</a>
+		<a @click="signout">signout</a>
 		<NavItem routeName="about" displayName="about" />
 	</div>
 </template>
@@ -22,12 +22,18 @@ export default {
 	},
 	methods: {
 		signin() {
-			EventService.signin()
-				.then(response => {
-					console.log(response);
-					this.successfulsignin = true;
-				})
-				.catch(err => console.log(err));
+			window.open(
+				'http://localhost:4000/auth/login',
+				'login',
+				'width=452,height=633,menubar=no,toolbar=no,location=no'
+			);
+			window.addEventListener('message', function(event) {
+				if (event.origin != 'http://localhost:4000') {
+					return;
+				}
+				console.log(event.data);
+				if (event.data == 'success') this.successfulsignin = true;
+			});
 		},
 		signout() {
 			EventService.signout()

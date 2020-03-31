@@ -8,7 +8,9 @@ const UserModel = mongoose.model("user");
 // To prevent logged in users from accessing general routes
 function dontAllowLoggedIn(req, res, next) {
 	if (req.session.user_email) {
-		res.end("Already Logged In");
+		res.render("message", {
+			message: "logged in"
+		});
 	} else {
 		next();
 	}
