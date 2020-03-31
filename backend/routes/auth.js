@@ -115,21 +115,17 @@ router.get("/success", async (req, res) => {
 
 router.get("/logout", (req, res) => {
 	if (req.user && req.session.user_email) {
+		res.setHeader("Content-Type", "application/json")
 		req.session.destroy(err => {
 			if (err) {
-				res.end("Unable to logout");
+				res.end(JSON.stringify({ status: 'failed' }));
 			} else {
-				res.end("Successfully logged out");
+				res.end(JSON.stringify({ status: 'success' }));
 			}
 		});
 	} else {
-		res.end("Not logged in");
+		res.end(JSON.stringify({ status: 'failed' }));
 	}
 });
-
-/* router.get("/refreshTest", allowLoggedIn, (req, res) => {
-	refreshAccessToken(req, res, () => { });
-	res.end("Look at console");
-}); */
 
 module.exports = router;
