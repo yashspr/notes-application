@@ -2,7 +2,7 @@
 	<div id="nav">
 		<NavItem routeName="home" displayName="Simple Note" />
 		<a v-if="!successfulsignin" @click="signin">signin</a>
-		<a @click="signout">signout</a>
+		<a v-else @click="signout">signout</a>
 		<NavItem routeName="about" displayName="about" />
 	</div>
 </template>
@@ -14,14 +14,26 @@ import EventService from '@/services/EventService.js';
 export default {
 	data() {
 		return {
-			successfulsignin: false
+			successfulsignin: null
 		};
 	},
 	components: {
 		NavItem
 	},
+	mounted() {
+		EventService.isUserLoggedIn()
+			.then(response => {
+				console.log(response);
+
+				response.data.status == 'success'
+					? (this.successfulsignin = true)
+					: (this.successfulsignin = false);
+			})
+			.catch(err => console.log(err));
+	},
 	methods: {
 		signin() {
+			const self = this;
 			window.open(
 				'http://localhost:4000/auth/login',
 				'login',
@@ -31,15 +43,15 @@ export default {
 				if (event.origin != 'http://localhost:4000') {
 					return;
 				}
-				console.log(event.data);
-				if (event.data == 'success') this.successfulsignin = true;
+				if (event.data == 'success') self.successfulsignin = true;
 			});
 		},
 		signout() {
 			EventService.signout()
 				.then(response => {
-					console.log(response);
-					this.successfulsignin = false;
+					response.status === 200
+						? (this.successfulsignin = false)
+						: console.log(response);
 				})
 				.catch(err => console.log(err));
 		}
