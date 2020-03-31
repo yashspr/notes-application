@@ -2,7 +2,7 @@
 	<div id="nav">
 		<NavItem routeName="home" displayName="Simple Note" />
 		<a v-if="!successfulsignin" @click="signin">signin</a>
-		<a @click="signout">signout</a>
+		<a v-else @click="signout">signout</a>
 		<NavItem routeName="about" displayName="about" />
 	</div>
 </template>
@@ -22,6 +22,7 @@ export default {
 	},
 	methods: {
 		signin() {
+			const self = this;
 			window.open(
 				'http://localhost:4000/auth/login',
 				'login',
@@ -31,8 +32,7 @@ export default {
 				if (event.origin != 'http://localhost:4000') {
 					return;
 				}
-				console.log(event.data);
-				if (event.data == 'success') this.successfulsignin = true;
+				if (event.data == 'success') self.successfulsignin = true;
 			});
 		},
 		signout() {

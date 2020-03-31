@@ -7,9 +7,6 @@ const apiClient = axios.create({
 });
 
 export default {
-	signin() {
-		return apiClient.get('/auth/login');
-	},
 	signout() {
 		return apiClient.get('/auth/logout');
 	}
