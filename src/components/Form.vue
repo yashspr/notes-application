@@ -102,8 +102,7 @@ export default {
 		deleteNote() {
 			!this.note.fileID
 				? alert("select note to delete")
-				: this.$store.dispatch("deleteNote", this.note.fileID),
-				this.clearForm();
+				: this.$store.dispatch("deleteNote", this.note.fileID);
 		},
 		collectFormData() {
 			let note = {};
