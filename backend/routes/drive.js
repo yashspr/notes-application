@@ -3,7 +3,7 @@ const router = express.Router();
 const uid = require("uid");
 const {
 	constructClient,
-	constructDriveClient
+	constructDriveClient,
 } = require("../middleware/general");
 const { allowLoggedIn } = require("../middleware/auth");
 const {
@@ -12,7 +12,7 @@ const {
 	getFile,
 	uploadFile,
 	updateFile,
-	deleteFile
+	deleteFile,
 } = require("../helpers/drive");
 const MetaDataHandler = require("../helpers/MetadataHandler");
 
@@ -26,11 +26,11 @@ router.get("/", (req, res) => {
 
 router.get("/metadata", (req, res) => {
 	getMetaDataFile(req)
-		.then(metadata => {
+		.then((metadata) => {
 			res.setHeader("Content-Type", "application/json");
 			res.end(JSON.stringify(metadata));
 		})
-		.catch(err => {
+		.catch((err) => {
 			console.log(err);
 			res.end("unable to fetch metadata");
 		});
@@ -57,7 +57,7 @@ router.get("/list", (req, res) => {
 			spaces: "appDataFolder",
 			/* pageSize: 10, */
 			/* fields: "nextPageToken, files(id, name)" */
-			fields: "files(id, name)"
+			fields: "files(id, name)",
 		},
 		(err, resp) => {
 			if (err) return console.log("The API returned an error: " + err);
@@ -75,7 +75,7 @@ router.get("/view/:fileid", (req, res) => {
 		return;
 	}
 	getFile(req, fileId)
-		.then(data => res.end(data))
+		.then((data) => res.end(data))
 		.catch(() => res.end("error"));
 });
 
@@ -169,16 +169,18 @@ router.post("/upload", async (req, res) => {
 		}
 		if (metadata) {
 			let erroredFiles = [];
+			let newFileIDs = [];
 			for (let i = 0; i < files.length; i++) {
 				try {
 					let filename = "file-" + uid() + ".md";
-					let fileId = await uploadFile(req, files[i].body, filename);
+					let fileId = await uploadFile(req, files[i].description, filename);
+					newFileIDs.push({ oldID: files[i].fileID, newID: fileId });
 					metadataHandler.newFile({
 						fileId,
 						filename,
 						title: files[i].title,
-						createdDate: Date.now(),
-						tags: files[i].tags
+						createdDate: files[i].createdDate,
+						tags: files[i].tags,
 					});
 				} catch (err) {
 					console.log(err);
@@ -188,10 +190,14 @@ router.post("/upload", async (req, res) => {
 			try {
 				await saveMetaDataFile(req, metadataHandler.metadata);
 			} catch (err) {
+				res.end(JSON.stringify({ status: "failed" }));
 				console.log(err);
 			}
+			console.log("new file ids from drive", newFileIDs);
 			res.setHeader("Content-Type", "application/json");
-			res.end(JSON.stringify(erroredFiles));
+			res.end(
+				JSON.stringify({ newFileIDs: newFileIDs, erroredFiles: erroredFiles })
+			);
 		} else {
 			res.end("unable to fetch metadata");
 		}
@@ -247,33 +253,28 @@ router.post("/update", async (req, res) => {
 			console.log(err);
 		}
 		if (metadata) {
-			let erroredFiles = [];
+			let erroredFileIds = [];
 			for (let i = 0; i < files.length; i++) {
 				try {
-					let fileId = await updateFile(
-						req,
-						files[i].body,
-						files[i].fileId
-					);
+					await updateFile(req, files[i].description, files[i].fileID);
 					metadataHandler.updateFile({
-						fileId: files[i].fileId,
+						fileId: files[i].fileID,
 						title: files[i].title,
-						lastModified: Date.now(),
-						tags: files[i].tags
+						lastModified: files[i].lastModified,
+						tags: files[i].tags,
 					});
 				} catch (err) {
 					console.log(err);
-					erroredFiles.push(files[i]);
+					erroredFileIds.push(files[i].fileID);
 				}
 			}
-
 			try {
 				await saveMetaDataFile(req, metadataHandler.metadata);
 			} catch (err) {
 				console.log(err);
 			}
 			res.setHeader("Content-Type", "application/json");
-			res.end(JSON.stringify(erroredFiles));
+			res.end(JSON.stringify({ erroredFileIds: erroredFileIds }));
 		} else {
 			res.end("unable to fetch metadata");
 		}
@@ -323,14 +324,13 @@ router.post("/delete", async (req, res) => {
 					erroredFileIds.push(fileIds[i]);
 				}
 			}
-
 			try {
 				await saveMetaDataFile(req, metadataHandler.metadata);
 			} catch (err) {
 				console.log(err);
 			}
 			res.setHeader("Content-Type", "application/json");
-			res.end(JSON.stringify(erroredFileIds));
+			res.end(JSON.stringify({ erroredFileIds: erroredFileIds }));
 		} else {
 			res.end("unable to fetch metadata");
 		}
