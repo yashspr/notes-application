@@ -1,20 +1,53 @@
 <template>
-	<form class="form">
-		<input
-			type="text"
-			v-model="title"
-			class="form__title"
-			placeholder="Title of your notes"
-			@keyup="updateNote"
-		/>
-		<textarea
-			name="notes"
-			v-model="description"
-			class="form__textarea"
-			placeholder="Takedown your notes"
-			@keyup="updateNote"
-		></textarea>
-	</form>
+	<div class="form__container">
+		<div class="toolbar">
+			<button class="toolbar__icon-container" @click="syncNotes">
+				<svg class="toolbar__icon icon__sync">
+					<use xlink:href="./../assets/sprite.svg#icon-loop2" />
+				</svg>
+			</button>
+			<button class="toolbar__icon-container" @click="clearForm">
+				<svg class="toolbar__icon">
+					<use xlink:href="./../assets/sprite.svg#icon-block" />
+				</svg>
+			</button>
+			<button class="toolbar__icon-container" @click="addNewNote">
+				<svg class="toolbar__icon">
+					<use xlink:href="./../assets/sprite.svg#icon-add-to-list" />
+				</svg>
+			</button>
+			<button class="toolbar__icon-container" @click="deleteNote">
+				<svg class="toolbar__icon">
+					<use xlink:href="./../assets/sprite.svg#icon-trash-can" />
+				</svg>
+			</button>
+		</div>
+		<form class="form">
+			<div class="title__flex">
+				<input
+					type="text"
+					v-model="note.title"
+					class="form__title"
+					placeholder="Title of your notes"
+					@change="updateNote"
+				/>
+				<input
+					type="text"
+					v-model="note.tags"
+					class="form__title"
+					placeholder="Tags(tag1,tag2)"
+					@change="updateTags"
+				/>
+			</div>
+			<textarea
+				name="notes"
+				v-model="note.description"
+				class="form__textarea"
+				placeholder="Takedown your notes"
+				@change="updateNote"
+			></textarea>
+		</form>
+	</div>
 </template>
 
 <script>
@@ -23,69 +56,72 @@ import EventBus from './../main.js';
 export default {
 	data() {
 		return {
-			title: null,
-			description: null
+			note: {
+				title: '',
+				description: '',
+				tags: [],
+				createdDate: null,
+				lastModified: null,
+			},
 		};
 	},
-	mounted() {
-		EventBus.$on('populate-form', note => {
+	created() {
+		EventBus.$on('populate-form', (note) => {
 			this.populateForm(note);
-		});
-		EventBus.$on('clear-form', () => {
-			this.clearForm();
-		});
-		EventBus.$on('fetch-form-data', () => {
-			this.addNewNote();
-		});
-		EventBus.$on('fetch-note-id', () => {
-			this.deleteNote();
 		});
 	},
 	methods: {
 		populateForm(note) {
-			this.id = note.id;
-			this.title = note.title;
-			this.description = note.description;
+			this.note = note;
 		},
 		clearForm() {
-			this.title = null;
-			this.description = null;
-		},
-		updateNote() {
-			if (this.id) {
-				let note = {
-					id: this.id,
-					title: this.title,
-					description: this.description
-				};
-				EventBus.$emit('update-note', note);
-			}
+			this.note = {
+				title: '',
+				description: '',
+				tags: [],
+				createdDate: null,
+				lastModified: null,
+			};
 		},
 		addNewNote() {
-			let note = {};
-			if (!this.id) {
-				this.title = this.title === null || '' ? 'New Note' : this.title;
-				this.description =
-					this.description === null || ''
-						? 'Write your notes'
-						: this.description;
-				note.title = this.title;
-				note.description = this.description;
-				this.title = null;
-				this.description = null;
+			const note = this.collectFormData();
+			if (this.note.fileID) {
+				this.$store.dispatch('addToUpdateNotes', note);
 			} else {
-				note.title = 'New Note';
-				note.description = 'Write your notes';
+				this.note.title == ''
+					? alert('note needs a title ')
+					: this.$store.dispatch('addToNewNotes', note);
 			}
-			EventBus.$emit('add-to-notes', note);
+			this.clearForm();
+		},
+		updateNote() {
+			const note = this.collectFormData();
+			this.$store.dispatch('addToUpdateNotes', note);
+			this.note = note;
 		},
 		deleteNote() {
-			!this.id
-				? alert('no note is selected')
-				: EventBus.$emit('delete-note', this.id);
-			this.title = null;
-			this.description = null;
-		}
-	}
+			!this.note.fileID
+				? alert('select note to delete')
+				: this.$store.dispatch('deleteNote', this.note.fileID);
+		},
+		collectFormData() {
+			let note = {};
+			this.note.fileID
+				? (note.fileID = this.note.fileID)
+				: (note.fileID = `temp${Math.floor(Math.random() * 1000000)}`);
+			note.title = this.note.title;
+			note.description = this.note.description;
+			note.tags = this.note.tags;
+			note.createdDate = this.note.createdDate;
+			note.lastModified = Date.now();
+			return note;
+		},
+		updateTags() {
+			this.note.tags = this.note.tags.split(',');
+		},
+		syncNotes() {
+			this.$store.dispatch('syncNotes');
+		},
+	},
 };
 </script>

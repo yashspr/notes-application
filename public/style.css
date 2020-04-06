@@ -32,8 +32,9 @@ body {
   padding-left: 2rem 0 0 2rem;
   width: 20vw;
   border-right: 0.1rem solid var(--secondary-color);
+  overflow: auto;
 }
-.body__container .create__container {
+.body__container .form__container {
   width: 80vw;
 }
 
@@ -67,10 +68,11 @@ body {
 }
 .note-card__title {
   font-size: 2rem;
+  margin-bottom: 1rem;
 }
 .note-card__description {
   font-size: 1.5rem;
-  line-height: 4rem;
+  line-height: 2.5rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -96,6 +98,7 @@ body {
   height: 100%;
   font-size: 2rem;
   resize: none;
+  outline: none;
 }
 
 .toolbar {
@@ -108,11 +111,28 @@ body {
   margin-right: 2rem;
   display: flex;
   cursor: pointer;
+  border: none;
+  background: none;
+  transition: transform 3s;
 }
 .toolbar__icon {
   height: 2.5rem;
   width: 2.5rem;
   fill: var(--primary-color);
+}
+.toolbar__icon--disabled {
+  fill: var(--secondary-color);
+}
+
+.title__flex {
+  display: flex;
+}
+.title__flex:last-child {
+  border-left: 0.1rem solid var(--secondary-color);
+}
+
+.icon__sync:active {
+  transform: rotate(90deg);
 }
 
 /*# sourceMappingURL=style.css.map */

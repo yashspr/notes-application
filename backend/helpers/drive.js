@@ -7,19 +7,19 @@ function createMetaDataFile(drive) {
 
 		var fileMetadata = {
 			name: filename,
-			parents: ["appDataFolder"]
+			parents: ["appDataFolder"],
 		};
 
 		var media = {
 			mimeType: "application/json",
-			body: Readable.from("{}")
+			body: Readable.from("{}"),
 		};
 
 		drive.files.create(
 			{
 				resource: fileMetadata,
 				media,
-				fields: "id"
+				fields: "id",
 			},
 			(err, file) => {
 				if (err) {
@@ -39,7 +39,7 @@ function getMetaDataFileId(req) {
 				{
 					q: "name='metadata.json'",
 					spaces: "appDataFolder",
-					fields: "files(id, name)"
+					fields: "files(id, name)",
 				},
 				(err, resp) => {
 					if (err) {
@@ -47,12 +47,12 @@ function getMetaDataFileId(req) {
 					}
 					if (resp.data.files.length == 0) {
 						createMetaDataFile(req.drive)
-							.then(id => {
+							.then((id) => {
 								console.log("Metadata file created");
 								req.session.metadataId = id;
 								resolve(id);
 							})
-							.catch(err => {
+							.catch((err) => {
 								console.log("Unable to create metadata file.");
 								reject(err);
 							});
@@ -71,25 +71,25 @@ function getMetaDataFileId(req) {
 function getMetaDataFile(req) {
 	return new Promise((resolve, reject) => {
 		getMetaDataFileId(req)
-			.then(id => {
+			.then((id) => {
 				req.drive.files
 					.get({
 						fileId: id,
 						alt: "media",
-						parents: ["appDataFolder"]
+						parents: ["appDataFolder"],
 					})
-					.then(resp => {
+					.then((resp) => {
 						// res.setHeader("Content-Type", "application/json");
 						// res.end(JSON.stringify(resp.data, null, 4));
 						resolve(resp.data); // resp.data will be a javascript object and not a string
 					})
-					.catch(err => {
+					.catch((err) => {
 						// Catch block is called when the the given ID is invalid and a file couldnt be found.
 						console.log("Error: " + err);
 						reject(err);
 					});
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err);
 				reject(err);
 			});
@@ -99,17 +99,17 @@ function getMetaDataFile(req) {
 function saveMetaDataFile(req, metadata) {
 	return new Promise((resolve, reject) => {
 		getMetaDataFileId(req)
-			.then(id => {
+			.then((id) => {
 				var media = {
 					mimeType: "text/plain",
-					body: Readable.from(JSON.stringify(metadata, null, 4))
+					body: Readable.from(JSON.stringify(metadata, null, 4)),
 				};
 
 				req.drive.files.update(
 					{
 						media,
 						fields: "id",
-						fileId: id
+						fileId: id,
 					},
 					(err, file) => {
 						if (err) {
@@ -123,7 +123,7 @@ function saveMetaDataFile(req, metadata) {
 					}
 				);
 			})
-			.catch(err => {
+			.catch((err) => {
 				reject(err);
 			});
 	});
@@ -135,12 +135,12 @@ function getFile(req, fileId) {
 			.get({
 				fileId: fileId,
 				alt: "media",
-				parents: ["appDataFolder"]
+				parents: ["appDataFolder"],
 			})
-			.then(resp => {
+			.then((resp) => {
 				resolve(resp.data);
 			})
-			.catch(err => {
+			.catch((err) => {
 				// Catch block is called when the the given ID is invalid and a file couldnt be found.
 				console.log("Error: " + err);
 				reject(err);
@@ -152,19 +152,18 @@ function uploadFile(req, text, filename) {
 	return new Promise((resolve, reject) => {
 		var fileMetadata = {
 			name: filename,
-			parents: ["appDataFolder"]
+			parents: ["appDataFolder"],
 		};
-
 		var media = {
 			mimeType: "text/plain",
-			body: Readable.from(text)
+			body: Readable.from(text),
 		};
 
 		req.drive.files.create(
 			{
 				resource: fileMetadata,
 				media,
-				fields: "id"
+				fields: "id",
 			},
 			(err, file) => {
 				if (err) {
@@ -184,14 +183,14 @@ function updateFile(req, text, fileId) {
 	return new Promise((resolve, reject) => {
 		var media = {
 			mimeType: "text/plain",
-			body: Readable.from(text)
+			body: Readable.from(text),
 		};
 
 		req.drive.files.update(
 			{
 				media,
 				fields: "id",
-				fileId: fileId
+				fileId: fileId,
 			},
 			(err, file) => {
 				if (err) {
@@ -212,7 +211,7 @@ function deleteFile(req, fileId) {
 		req.drive.files.delete(
 			{
 				fields: "trashed",
-				fileId: fileId
+				fileId: fileId,
 			},
 			(err, file) => {
 				if (err) {
@@ -234,5 +233,5 @@ module.exports = {
 	getFile,
 	uploadFile,
 	updateFile,
-	deleteFile
+	deleteFile,
 };

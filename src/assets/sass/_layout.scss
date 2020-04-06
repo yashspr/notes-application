@@ -8,8 +8,9 @@
 		padding-left: 2rem 0 0 2rem;
 		width: 20vw;
 		border-right: 0.1rem solid var(--secondary-color);
+		overflow: auto;
 	}
-	.create__container {
+	.form__container {
 		width: 80vw;
 	}
 }

@@ -14,22 +14,24 @@ import EventService from '@/services/EventService.js';
 export default {
 	data() {
 		return {
-			successfulsignin: null
+			successfulsignin: false,
 		};
 	},
 	components: {
-		NavItem
+		NavItem,
 	},
-	mounted() {
+	created() {
 		EventService.isUserLoggedIn()
-			.then(response => {
-				console.log(response);
-
-				response.data.status == 'success'
-					? (this.successfulsignin = true)
-					: (this.successfulsignin = false);
+			.then((response) => {
+				if (response.data.status == 'success') {
+					this.successfulsignin = true;
+					this.$store.dispatch('fetchNotes');
+				} else {
+					this.successfulsignin = false;
+					this.$store.dispatch('showDefaultNotes');
+				}
 			})
-			.catch(err => console.log(err));
+			.catch((err) => console.log(err));
 	},
 	methods: {
 		signin() {
@@ -43,18 +45,19 @@ export default {
 				if (event.origin != 'http://localhost:4000') {
 					return;
 				}
-				if (event.data == 'success') self.successfulsignin = true;
+				if (event.data == 'success')
+					(self.successfulsignin = true), window.location.reload();
 			});
 		},
 		signout() {
 			EventService.signout()
-				.then(response => {
+				.then((response) => {
 					response.status === 200
-						? (this.successfulsignin = false)
+						? ((this.successfulsignin = false), window.location.reload())
 						: console.log(response);
 				})
-				.catch(err => console.log(err));
-		}
-	}
+				.catch((err) => console.log(err));
+		},
+	},
 };
 </script>

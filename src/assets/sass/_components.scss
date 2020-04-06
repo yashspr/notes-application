@@ -26,12 +26,12 @@
 		margin-top: 2rem;
 	}
 	&__title {
-		// margin: 2rem 0;
 		font-size: 2rem;
+		margin-bottom: 1rem;
 	}
 	&__description {
 		font-size: 1.5rem;
-		line-height: 4rem;
+		line-height: 2.5rem;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -57,6 +57,7 @@
 		height: 100%;
 		font-size: 2rem;
 		resize: none;
+		outline: none;
 	}
 }
 
@@ -70,10 +71,31 @@
 		margin-right: 2rem;
 		display: flex;
 		cursor: pointer;
+		border: none;
+		background: none;
+		transition: transform 3s;
 	}
 	&__icon {
 		height: 2.5rem;
 		width: 2.5rem;
 		fill: var(--primary-color);
+		&--disabled {
+			fill: var(--secondary-color);
+		}
+	}
+}
+
+.title__flex {
+	display: flex;
+	&:last-child {
+		border-left: 0.1rem solid var(--secondary-color);
+	}
+}
+
+.icon {
+	&__sync {
+		&:active {
+			transform: rotate(90deg);
+		}
 	}
 }
