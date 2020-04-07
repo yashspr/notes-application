@@ -168,7 +168,7 @@ router.post("/upload", async (req, res) => {
 			console.log(err);
 		}
 		if (metadata) {
-			let erroredFiles = [];
+			let erroredFileIds = [];
 			let newFileIDs = [];
 			for (let i = 0; i < files.length; i++) {
 				try {
@@ -184,7 +184,7 @@ router.post("/upload", async (req, res) => {
 					});
 				} catch (err) {
 					console.log(err);
-					erroredFiles.push(files[i]);
+					erroredFileIds.push(files[i].fileID);
 				}
 			}
 			try {
@@ -196,7 +196,10 @@ router.post("/upload", async (req, res) => {
 			console.log("new file ids from drive", newFileIDs);
 			res.setHeader("Content-Type", "application/json");
 			res.end(
-				JSON.stringify({ newFileIDs: newFileIDs, erroredFiles: erroredFiles })
+				JSON.stringify({
+					newFileIDs: newFileIDs,
+					erroredFileIds: erroredFileIds,
+				})
 			);
 		} else {
 			res.end("unable to fetch metadata");

@@ -1,7 +1,7 @@
 <template>
 	<div class="list__container">
 		<NoteCard
-			v-for="note in notes"
+			v-for="note in notesModule.notes"
 			:key="note.fileID"
 			:note="note"
 			:fileID="note.fileID"
@@ -24,7 +24,7 @@ export default {
 		NoteCard,
 	},
 	computed: {
-		...mapState(['notes']),
+		...mapState(['notesModule']),
 	},
 };
 </script>

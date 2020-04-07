@@ -51,14 +51,14 @@
 </template>
 
 <script>
-import EventBus from "./../main.js";
+import EventBus from './../main.js';
 
 export default {
 	data() {
 		return {
 			note: {
-				title: "",
-				description: "",
+				title: '',
+				description: '',
 				tags: [],
 				createdDate: null,
 				lastModified: null,
@@ -66,7 +66,7 @@ export default {
 		};
 	},
 	created() {
-		EventBus.$on("populate-form", (note) => {
+		EventBus.$on('populate-form', (note) => {
 			this.populateForm(note);
 		});
 	},
@@ -76,8 +76,8 @@ export default {
 		},
 		clearForm() {
 			this.note = {
-				title: "",
-				description: "",
+				title: '',
+				description: '',
 				tags: [],
 				createdDate: null,
 				lastModified: null,
@@ -86,23 +86,26 @@ export default {
 		addNewNote() {
 			const note = this.collectFormData();
 			if (this.note.fileID) {
-				this.$store.dispatch("addToUpdateNotes", note);
+				this.note.title
+					? this.$store.dispatch('addToUpdateNotes', note)
+					: alert('note needs a title ');
 			} else {
-				this.note.title == "" && this.note.description
-					? alert("note needs a title ")
-					: this.$store.dispatch("addToNewNotes", note);
+				this.note.title == '' || this.note.description
+					? alert('note needs a title ')
+					: this.$store.dispatch('addToNewNotes', note);
 			}
 			this.clearForm();
 		},
 		updateNote() {
 			const note = this.collectFormData();
-			this.$store.dispatch("addToUpdateNotes", note);
+			this.$store.dispatch('addToUpdateNotes', note);
 			this.note = note;
 		},
 		deleteNote() {
 			!this.note.fileID
-				? alert("select note to delete")
-				: this.$store.dispatch("deleteNote", this.note.fileID);
+				? alert('select note to delete')
+				: this.$store.dispatch('deleteNote', this.note.fileID);
+			this.clearForm();
 		},
 		collectFormData() {
 			let note = {};
@@ -117,10 +120,10 @@ export default {
 			return note;
 		},
 		updateTags() {
-			this.note.tags = this.note.tags.split(",");
+			this.note.tags = this.note.tags.split(',');
 		},
 		syncNotes() {
-			this.$store.dispatch("syncNotes");
+			this.$store.dispatch('syncNotes');
 		},
 	},
 };
